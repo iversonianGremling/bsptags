@@ -1,0 +1,172 @@
+#!/bin/sh
+
+# Define the usage function for displaying help
+usage() {
+  echo "Usage: $0 [workspace_number] [-b <workspace_number>] [-r] [-m <workspace_number1> <workspace_number2>] [-h]"
+  echo "Options:"
+  echo "  -b <workspace_number>                         Move windows from the specified workspace to the currently focused workspace"
+  echo "  -r                                            Remove the temporary file"
+  echo "  -m <workspace_number1> <workspace_number2>    Moves windows from workspace 1 to workspace 2"
+  echo "  -h                                            Shows this help message"
+  echo "  <workspace_number>                            Move windows from the specified workspace to the currently focused workspace"
+}
+
+# Check if any arguments were passed
+if [ $# -eq 0 ]; then
+  echo "No arguments provided."
+  usage
+  exit 1
+fi
+
+tmp_file="/tmp/bspwm_window_info"
+
+for arg in "$@"; do
+  case $arg in
+    -h)
+      usage
+      exit 0
+      ;;
+    -b)
+      if [ -e $tmp_file ]; then
+        if [ -n "$2" ] && [ "$2" -ge 0 ] && [ "$2" -le 9 ] 2>/dev/null; then
+          if [ "$2" -eq 0 ]; then
+            for i in $(seq 1 9); do
+              workspace_and_windows=$(grep "$i - " $tmp_file | awk '{ for(i = 3; i <= NF; i++) printf "%s ", $i; print "" }')
+              workspace=$(echo $workspace_and_windows | awk '{print $1}')
+              windows=$(echo $workspace_and_windows | awk '{ for(i = 2; i <= NF; i++) printf "%s ", $i; print "" }')
+              for window in $windows; do
+                bspc node $window --to-desktop $workspace
+              done
+            done
+            echo "" > "$tmp_file"
+          else
+            workspace_and_windows=$(grep "$2 - " $tmp_file | awk '{ for(i = 3; i <= NF; i++) printf "%s ", $i; print "" }')
+            workspace=$(echo $workspace_and_windows | awk '{print $1}')
+            windows=$(echo $workspace_and_windows | awk '{ for(i = 2; i <= NF; i++) printf "%s ", $i; print "" }')
+            for window in $windows; do
+              bspc node $window --to-desktop $workspace
+            done
+
+            grep -v "$2" "$tmp_file" | sed '/^\s*$/d' > /tmp/bspwm_window_info_tmp && mv /tmp/bspwm_window_info_tmp "$tmp_file"
+
+          fi
+        else
+          echo "Invalid argument for -b option"
+        fi
+      else 
+        echo "There's nothing to do"
+      fi
+      break
+      ;;
+    -m)
+      #check the number of arguments
+      if [ "$#" -ne 3 ]; then
+        echo "Must send two arguments"
+        break
+      fi
+      if [ "$2" -le 0 ] && [ "$2" -ge 9 ]; then
+        echo "Argument \$2 is not a valid workspace number"
+      fi
+      if [ "$3" -le 0 ] && [ "$3" -ge 9 ]; then
+        echo "Argument \$3 is not a valid workspace number"
+      fi
+
+
+      tmp_file="/tmp/bspwm_window_info"
+      # Access the first argument
+      second_workspace=$2
+      send_workspace=$3
+
+      workspaces_names=$(bspc query -D --names)
+      workspaces_names=$(echo "$workspaces_names" | tr '\n' ' ')
+
+      send_workspace_name=$(echo "$workspaces_names" | cut -d' ' -f $send_workspace)
+        second_workspace_name=$(echo "$workspaces_names" | cut -d' ' -f $second_workspace)
+
+        windows_second_workspace=$(bspc query -N -n .window -d $second_workspace_name)
+        windows_second_workspace=$(echo "$windows_second_workspace" | tr '\n' ' ')
+
+        for window in $windows_second_workspace; do
+          bspc node $window --to-desktop $send_workspace_name
+        done
+
+        if ! grep -q "$second_workspace_name" "$tmp_file"; then
+          echo "$second_workspace - $second_workspace_name" >> $tmp_file
+          echo "$second_workspace - $windows_second_workspace" >> $tmp_file
+        else
+          grep -v "$second_workspace_name" "$tmp_file" | sed '/^\s*$/d' > /tmp/bspwm_window_info_tmp && mv /tmp/bspwm_window_info_tmp "$tmp_file"
+          echo "$second_workspace - $second_workspace_name" >> $tmp_file
+          echo "$second_workspace - $windows_second_workspace" >> $tmp_file
+          echo "Workspace already exists in tmp file"
+        fi
+      break
+      ;;
+    -r)
+      if [ -e $tmp_file ]; then
+        rm $tmp_file
+      else 
+        echo "Temp file doesn't exist"
+      fi
+      ;;
+    [0-9]*)
+      if [ "$1" -le 0 ] && [ "$1" -ge 9 ]; then
+        echo "Argument $1 is not a valid workspace number"
+      fi
+      tmp_file="/tmp/bspwm_window_info"
+      # Access the first argument
+      second_workspace=$1
+
+      workspaces_names=$(bspc query -D --names)
+      workspaces_names=$(echo "$workspaces_names" | tr '\n' ' ')
+
+      send_workspace_name=$(bspc query -D -d focused --names)
+
+      # TODO: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa 
+      if [ $1 -eq 0 ]; then
+        counter=0
+        for workspace_name in $workspaces_names; do 
+          counter=$((counter+1))
+          workspace_name=$(echo "$workspaces_names" | cut -d' ' -f $counter)
+
+          windows_workspace=$(bspc query -N -n .window -d $workspace_name)
+          windows_workspace=$(echo "$windows_workspace" | tr '\n' ' ')
+
+          for window in $windows_workspace; do
+            bspc node $window --to-desktop $send_workspace_name
+          done
+
+          if ! grep -q "$workspace_name" "$tmp_file"; then
+            echo "$counter - $workspace_name" >> $tmp_file
+            echo "$counter - $windows_workspace" >> $tmp_file
+          else
+            grep -v "$workspace_name" "$tmp_file" | sed '/^\s*$/d' > /tmp/bspwm_window_info_tmp && mv /tmp/bspwm_window_info_tmp "$tmp_file"
+            echo "$counter - $workspace_name" >> $tmp_file
+            echo "$counter - $windows_workspace" >> $tmp_file
+            echo "Workspace already exists in tmp file"
+          fi
+
+        done
+      else
+        second_workspace_name=$(echo "$workspaces_names" | cut -d' ' -f $second_workspace)
+
+        windows_second_workspace=$(bspc query -N -n .window -d $second_workspace_name)
+        windows_second_workspace=$(echo "$windows_second_workspace" | tr '\n' ' ')
+
+        for window in $windows_second_workspace; do
+          bspc node $window --to-desktop $send_workspace_name
+        done
+
+        if ! grep -q "$second_workspace_name" "$tmp_file"; then
+          echo "$second_workspace - $second_workspace_name" >> $tmp_file
+          echo "$second_workspace - $windows_second_workspace" >> $tmp_file
+        else
+          grep -v "$second_workspace_name" "$tmp_file" | sed '/^\s*$/d' > /tmp/bspwm_window_info_tmp && mv /tmp/bspwm_window_info_tmp "$tmp_file"
+          echo "$second_workspace - $second_workspace_name" >> $tmp_file
+          echo "$second_workspace - $windows_second_workspace" >> $tmp_file
+          echo "Workspace already exists in tmp file"
+        fi
+      fi
+      ;;
+  esac
+done
+
