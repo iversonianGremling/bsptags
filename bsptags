@@ -30,8 +30,8 @@ for arg in "$@"; do
       if [ -e $tmp_file ]; then
         if [ -n "$2" ] && [ "$2" -ge 0 ] && [ "$2" -le 9 ] 2>/dev/null; then
           if [ "$2" -eq 0 ]; then
-            for i in $(seq 1 9); do
-              workspace_and_windows=$(grep "$i - " $tmp_file | awk '{ for(i = 3; i <= NF; i++) printf "%s ", $i; print "" }')
+            for iter in $(seq 1 9); do
+              workspace_and_windows=$(grep "$iter - " $tmp_file | awk '{ for(i = 3; i <= NF; i++) printf "%s ", $i; print "" }')
               workspace=$(echo $workspace_and_windows | awk '{print $1}')
               windows=$(echo $workspace_and_windows | awk '{ for(i = 2; i <= NF; i++) printf "%s ", $i; print "" }')
               for window in $windows; do

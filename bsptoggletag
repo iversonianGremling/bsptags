@@ -1,0 +1,25 @@
+#!/bin/sh
+
+function toggle() {
+  if [ "$1" -eq 0 ]; then
+    echo "Argument equals 0"
+    if ! grep -qE '[0-9]+ - ' /tmp/bspwm_window_info; then
+      echo "File is empty"
+      ~/.scripts/bsptags/bsptags 0 >> /dev/null
+      return
+    else 
+      echo "File is not empty"
+      ~/.scripts/bsptags/bsptags -b 0 >> /dev/null
+      echo "" > /tmp/bspwm_window_info
+      return
+    fi 
+  else
+    if grep -e "$1 -" /tmp/bspwm_window_info; then
+      ~/.scripts/bsptags/bsptags -b "$1" >> /dev/null
+    else
+      ~/.scripts/bsptags/bsptags "$1" >> /dev/null
+    fi
+  fi
+}
+
+toggle $1
