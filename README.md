@@ -13,11 +13,15 @@ https://github.com/Vdevelasco/bsptags/assets/24989959/68cdf6f6-7769-4b5b-b78b-24
 
  - Its intended usage is mapping bsptoggletag 1,2,3 ...etc to a keyboard shortcut i.e. super+alt+1, super+alt+2...etc. 
 
- - When pressed all the windows in workspace 1 or 2 respectively will go to the workspace you are currently working in. 
+ - When pressed (let's say, super+alt+2, like in the videos) all the windows in workspace 2 will go to the workspace you are currently working in (let's say workspace 1). 
 
- - If the same keyboard shortcut is hit again they'll return to its original workspace.
+ - If the same keyboard shortcut is hit again the windows from workspace 2 will go back to where they came from.
 
- - With 0 all of the workspaces will be moved to the focused workspace
+ - With my shxkd configuration if I hit super+alt+0 all of the workspaces will merge in the current workspace. If hit again they'll return to their original workspaces.
+
+### Usefulness
+
+I have a workspace just for terminal stuff, another one just for browser stuff. I want to access terminal stuff from my browser workspace. I hit a key and all the terminal stuff appears there, when I'm done I hit it again and the terminal stuff goes back to its workspace.
 
 ## Limitations
 This script relies purely on bspc native "moving across workspaces" command so if you fuse a workspace with a lot of windows the layout might get messed up
