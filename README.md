@@ -29,12 +29,18 @@ If you are using it as a command in sxhkd you have to redirect its output to /de
 ``
 
 ### Video
-(working on it)
+
+https://github.com/Vdevelasco/bsptags/assets/24989959/68cdf6f6-7769-4b5b-b78b-24f62f428757
+
 
 ## Installation
 Just run 
 
 ``git clone https://github.com/Vdevelasco/bsptags/ ~/.scripts/``
+
+Keep in mind that if you want to use the commands you may want to update your $PATH variable, something like this inside your .bshrc or .zshrc:
+
+``export PATH="$HOME/.scripts/bsptags/:$PATH"``
 
 By default it looks for bsptags inside ~/.scripts/bsptags/, if you want to use another location change the variable "bsptags_location" inside bsptoggletag and that should be it
 Keep in mind that it's going to create them inside a folder in .scripts so you may want to update your $PATH variable like this if you want to use the commands directly from the terminal. You should add this to your .bashrc or .zshrc:
