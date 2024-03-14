@@ -1,4 +1,6 @@
 # BSPTAGS
+![bsptags_logo](https://github.com/Vdevelasco/bsptags/assets/24989959/6e82f6fe-b17d-4c6a-accf-9e6750390408)
+
 bsptags tries to imitate one of dwm's key features, combining tags (or workspaces in this case). 
 
 Its intended usage is mapping bsptoggletag 1,2,3 ...etc to a keyboard shortcut i.e. super+alt+1, super+alt+2...etc. When pressed all the windows in workspace 1 or 2 respectively will go to the workspace you are currently working in. If the same keyboard shortcut is hit again they'll return to its original workspace.
