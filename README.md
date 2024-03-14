@@ -40,8 +40,8 @@ Just run
 
 ``git clone https://github.com/Vdevelasco/bsptags/ ~/.scripts/``
 
-By default it looks for bsptags inside ~/.scripts/bsptags/, if you want to use another location change the variable "bsptags_location" inside bsptoggletag and that should be it.
+By default bsptoggletag looks for ~/.scripts/bsptags/bsptags, if you want to use another location change the variable "bsptags_location" inside bsptoggletag and that should be it.
 
-Keep in mind that it's going to create them inside a folder in .scripts so you may want to update your $PATH variable like this if you want to use the commands directly from the terminal. You should add this to your .bashrc or .zshrc:
+If you want to use the commands directy you should add this to your .bashrc or .zshrc:
 
 ``export PATH="$HOME/.scripts/bsptags/:$PATH"``
