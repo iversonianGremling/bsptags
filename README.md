@@ -29,10 +29,10 @@ This script relies purely on bspc native "moving across workspaces" command so i
   - bsptoggletag <workspace_number>: if two workspaces are not "merged" it'll try to merge them using bsptabs, if they are already merged it'll "unmerge" them
 
 If you are using it as a command in sxhkd you have to redirect its output to /dev/null like this:
-``super + alt + 3
+``super + alt + 3``
 
-  $HOME/.scripts/bsptags/bsptoggletag 3 >> /dev/null
-``
+``$HOME/.scripts/bsptags/bsptoggletag 3 >> /dev/null``
+
 
 
 ## Installation
