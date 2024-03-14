@@ -4,9 +4,15 @@
 
 
 
+
+### Video
+
+https://github.com/Vdevelasco/bsptags/assets/24989959/68cdf6f6-7769-4b5b-b78b-24f62f428757
+
 ### BSPTAGS tries to imitate one of dwm's key features, combining tags (or workspaces in this case). 
 
 Its intended usage is mapping bsptoggletag 1,2,3 ...etc to a keyboard shortcut i.e. super+alt+1, super+alt+2...etc. When pressed all the windows in workspace 1 or 2 respectively will go to the workspace you are currently working in. If the same keyboard shortcut is hit again they'll return to its original workspace.
+
 
 ## Limitations
 This script relies purely on bspc native "moving across workspaces" command so if you fuse a workspace with a lot of windows the layout might get messed up
@@ -27,10 +33,6 @@ If you are using it as a command in sxhkd you have to redirect its output to /de
 
   $HOME/.scripts/bsptags/bsptoggletag 3 >> /dev/null
 ``
-
-### Video
-
-https://github.com/Vdevelasco/bsptags/assets/24989959/68cdf6f6-7769-4b5b-b78b-24f62f428757
 
 
 ## Installation
