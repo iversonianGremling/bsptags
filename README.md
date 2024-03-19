@@ -24,7 +24,10 @@ https://github.com/Vdevelasco/bsptags/assets/24989959/68cdf6f6-7769-4b5b-b78b-24
 I have a workspace just for terminal stuff, another one just for browser stuff. I want to access terminal stuff from my browser workspace. I hit a key and all the terminal stuff appears there, when I'm done I hit it again and the terminal stuff goes back to its workspace.
 
 ## Limitations
-This script relies purely on bspc native "moving across workspaces" command so if you fuse a workspace with a lot of windows the layout might get messed up
+This script relies purely on bspc native "moving across workspaces" command so if you fuse a workspace with a lot of windows the layout might get messed up.
+
+## TODO
+bspc apparently has tools to deal with geometry
 
 ## Usage
 ### Bsptags
